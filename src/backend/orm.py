@@ -1,21 +1,28 @@
 __author__ = 'linas'
 
+
+import datetime
+
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///wind.db'
 db = SQLAlchemy(app)
 
 
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True)
-    email = db.Column(db.String(120), unique=True)
+class WindPoint(db.Model):
 
-    def __init__(self, username, email):
-        self.username = username
-        self.email = email
+    __tablename__ = 'windpoint'
+
+    id = db.Column(db.Integer, primary_key=True)
+    service = db.Column(db.String(255))
+    ts = db.Column(db.DateTime(), default=datetime.datetime.utcnow)
+
+    def __init__(self, service):
+        self.service = service
+        self.ts = datetime.datetime.utcnow()
 
     def __repr__(self):
-        return '<User %r>' % self.usern
+        return '<Service:\t\t{}, TS:\t\t{}>'.format(self.service, self.ts)
+
